@@ -42,26 +42,51 @@ const allowedOrigins = [
 //     })
 // );
 
+// app.use(
+//     cors({
+//         origin: function (origin, callback) {
+//             // Allow non-browser clients (Postman, curl)
+//             if (!origin) {
+//                 return callback(null, true);
+//             }
+
+//             if (allowedOrigins.includes(origin)) {
+//                 return callback(null, true);
+//             }
+
+//             // ❗ IMPORTANT: deny WITHOUT throwing
+//             return callback(null, false);
+//         },
+//         credentials: true,
+//         methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+//         allowedHeaders: ['Content-Type', 'Authorization'],
+//     })
+// );
+
 app.use(
     cors({
         origin: function (origin, callback) {
-            // Allow non-browser clients (Postman, curl)
-            if (!origin) {
+            // Allow non-browser tools (Postman, curl)
+            if (!origin) return callback(null, true);
+
+            // Allow localhost + deployed frontend
+            if (
+                origin === 'http://localhost:3000' ||
+                origin === 'http://localhost:5173' ||
+                origin === process.env.FRONTEND_URL
+            ) {
                 return callback(null, true);
             }
 
-            if (allowedOrigins.includes(origin)) {
-                return callback(null, true);
-            }
-
-            // ❗ IMPORTANT: deny WITHOUT throwing
-            return callback(null, false);
+            // IMPORTANT: allow preflight anyway
+            return callback(null, true);
         },
         credentials: true,
         methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
         allowedHeaders: ['Content-Type', 'Authorization'],
     })
 );
+
 
 // IMPORTANT: handle preflight requests
 //app.options('*', cors());
