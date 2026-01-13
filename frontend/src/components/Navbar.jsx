@@ -16,7 +16,7 @@ const Navbar = () => {
             <div className="container mx-auto px-4 py-3 flex justify-between items-center">
                 {/* Logo / Brand */}
                 <Link to={user?.role === 'admin' ? '/admin/jobs' : '/jobs'} className="text-xl font-bold">
-                    JobPortal
+                    Jobify
                 </Link>
 
                 {/* Navigation Links */}
