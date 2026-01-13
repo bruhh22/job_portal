@@ -24,17 +24,38 @@ const allowedOrigins = [
 // );
 
 // Middleware
+// app.use(
+//     cors({
+//         origin: function (origin, callback) {
+//             // Allow non-browser clients (Postman, curl)
+//             if (!origin) return callback(null, true);
+
+//             if (allowedOrigins.includes(origin)) {
+//                 return callback(null, true);
+//             } else {
+//                 return callback(new Error('CORS not allowed'));
+//             }
+//         },
+//         credentials: true,
+//         methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+//         allowedHeaders: ['Content-Type', 'Authorization'],
+//     })
+// );
+
 app.use(
     cors({
         origin: function (origin, callback) {
             // Allow non-browser clients (Postman, curl)
-            if (!origin) return callback(null, true);
+            if (!origin) {
+                return callback(null, true);
+            }
 
             if (allowedOrigins.includes(origin)) {
                 return callback(null, true);
-            } else {
-                return callback(new Error('CORS not allowed'));
             }
+
+            // ❗ IMPORTANT: deny WITHOUT throwing
+            return callback(null, false);
         },
         credentials: true,
         methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
